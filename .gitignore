@@ -5,3 +5,4 @@ node_modules/
 creaton.code-workspace
 .vscode/*
 !.vscode/settings.json.default
+contracts/package-lock.json

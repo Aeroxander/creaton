@@ -51,5 +51,10 @@
     "mainnet:export": "buidler --network mainnet export",
     "rinkeby:run": "cross-env BUIDLER_NETWORK=rinkeby ts-node --files",
     "buidler": "buidler"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^3.2.0",
+    "@superfluid-finance/ethereum-contracts": "0.1.0-preview-20200928-fix6",
+    "@truffle/contract": "^4.2.25"
   }
 }

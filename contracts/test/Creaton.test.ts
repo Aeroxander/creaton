@@ -1,20 +1,26 @@
 import {expect} from './chai-setup';
 import {ethers, deployments, getUnnamedAccounts} from '@nomiclabs/buidler';
 
-describe('Creaton', function () {
-  it('should work', async function () {
+describe('CreatonFactory', function () {
+  it('deploys successfully', async function () {
     await deployments.fixture();
-    const creatonContract = await ethers.getContract('Creaton');
-    expect(creatonContract.address).to.be.a('string');
+    const creatonFactory = await ethers.getContract('CreatonFactory');
+    expect(creatonFactory.address).to.be.a('string');
   });
 
-  it('setMessage works', async function () {
+  it('deploys Creator contract', async function () {
     await deployments.fixture();
-    const others = await getUnnamedAccounts();
-    const creatonContract = await ethers.getContract('Creaton', others[0]);
-    const testMessage = 'Hello World';
-    await expect(creatonContract.setMessage(testMessage))
-      .to.emit(creatonContract, 'MessageChanged')
-      .withArgs(others[0], testMessage);
+    const creatonFactory = await ethers.getContract('CreatonFactory');
+    const creator = await creatonFactory.deployCreator('ETHGlobal', 5, 12);
+    expect(creator.hash).to.be.a('string');
+  });
+});
+
+describe('Creator', function () {
+  it('deploys with creator title', async function () {
+    await deployments.fixture();
+    const creator = await ethers.getContract('Creator');
+    creator.init('ETHGlobal', 5, 12);
+    expect(await creator.getCreatorTitle()).to.equal('ETHGlobal');
   });
 });

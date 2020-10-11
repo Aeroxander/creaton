@@ -20,9 +20,7 @@ contract Creator {
     // function postUpgrade(uint256 id) public proxied {}
 
     constructor() {
-      // the proxied modifier from `buidler-deploy` ensure postUpgrade effect can only be 
-      // used once when the contract is deployed without proxy
-      // postUpgrade(id);
+        
     }
 
     // -----------------------------------------

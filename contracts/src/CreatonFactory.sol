@@ -3,20 +3,20 @@ pragma solidity 0.7.1;
 
 import "buidler-deploy/solc_0.7/proxy/Proxied.sol";
 import "@nomiclabs/buidler/console.sol";
-// import "/Creator.sol";
+import "./Creator.sol";
 
 contract CreatonFactory is Proxied {
     // -----------------------------------------
     // Events
     // -----------------------------------------
 
-    event CreatorDeployed(address indexed user, address creatorContract);
+    event CreatorDeployed(address indexed user, Creator creatorContract);
 
     // -----------------------------------------
     // Storage
     // -----------------------------------------
 
-    mapping(address => address) _creatorContracts;
+    Creator[] creatorContracts;
 
     // -----------------------------------------
     // Constructor
@@ -37,9 +37,12 @@ contract CreatonFactory is Proxied {
         uint256 subscriptionPrice, 
         uint256 projectDuration) external {
             
-        address memory _creatorContractAddr = new Creator(creatorTitle, subscriptionPrice, projectDuration);
-        _creatorContracts[msg.sender] = _creatorContractAddr;
+        console.log(creatorTitle, subscriptionPrice, projectDuration);
+        Creator _creatorContractAddr = new Creator();
+        creatorContracts.push(_creatorContractAddr);
 
         emit CreatorDeployed(msg.sender, _creatorContractAddr);
     }
+
+    function test() public {}
 }

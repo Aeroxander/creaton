@@ -16,8 +16,7 @@ contract CreatonFactory is Proxied {
     // Storage
     // -----------------------------------------
 
-    // TODO: change this to a mapping: creator's address => contract address
-    Creator[] creatorContracts;
+    mapping(address => Creator) public creatorContracts;
 
     // -----------------------------------------
     // Constructor
@@ -41,5 +40,9 @@ contract CreatonFactory is Proxied {
         emit CreatorDeployed(msg.sender, _creatorContract);
     }
 
-    function test() public {}
+    // function getCreatorContract(address owner) external returns address {
+    //     let _contractAddr = creatorContracts[owner];
+    //     require(_contractAddr != address(0), 'Contract not found');
+    //     return _contractAddr
+    // }
 }

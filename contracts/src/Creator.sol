@@ -34,16 +34,4 @@ contract Creator is Proxied {
     // -----------------------------------------
     // External Functions
     // -----------------------------------------
-
-    function getCreatorTitle() external view returns (string memory) {
-        return creatorTitle;
-    }
-
-    function getSubscriptionPrice() public view returns (uint256) {
-        return subscriptionPrice;
-    }
-
-    function getProjectDuration() public view returns (uint256) {
-        return projectDuration;
-    }
 }

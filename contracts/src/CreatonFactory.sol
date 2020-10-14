@@ -10,13 +10,13 @@ contract CreatonFactory is Proxied {
     // Events
     // -----------------------------------------
 
-    event CreatorDeployed(address indexed user, Creator creatorContract);
+    event CreatorDeployed(address user, address creatorContract);
 
     // -----------------------------------------
     // Storage
     // -----------------------------------------
 
-    mapping(address => Creator) public creatorContracts;
+    mapping(address => address) public creatorContracts;
 
     // -----------------------------------------
     // Constructor
@@ -33,16 +33,11 @@ contract CreatonFactory is Proxied {
         uint256 subscriptionPrice, 
         uint256 projectDuration) external {
             
-        Creator _creatorContract = new Creator();
-        _creatorContract.init(creatorTitle, subscriptionPrice, projectDuration);
-        creatorContracts.push(_creatorContract);
+        Creator creatorContract = new Creator();
+        address creatorContractAddr = address(creatorContract);
+        creatorContract.init(creatorTitle, subscriptionPrice, projectDuration);
+        creatorContracts[msg.sender] = creatorContractAddr;
 
-        emit CreatorDeployed(msg.sender, _creatorContract);
+        emit CreatorDeployed(msg.sender, creatorContractAddr);
     }
-
-    // function getCreatorContract(address owner) external returns address {
-    //     let _contractAddr = creatorContracts[owner];
-    //     require(_contractAddr != address(0), 'Contract not found');
-    //     return _contractAddr
-    // }
 }

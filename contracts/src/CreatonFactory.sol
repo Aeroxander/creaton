@@ -16,32 +16,30 @@ contract CreatonFactory is Proxied {
     // Storage
     // -----------------------------------------
 
+    // TODO: change this to a mapping: creator's address => contract address
+    //use EnumerableSet?
+    //Also do we even need this? The membership address is already mapped in the SuperApp contract
+    //We do want the creator to be the owner of their Membership ERC-1155's, but Openzeppelin has a solution with the Initialize library
+    //EnumerableSet.AddressSet private _creatorAddressSet;
+    //using EnumerableSet for EnumerableSet.AddressSet;
     Creator[] creatorContracts;
 
     // -----------------------------------------
     // Constructor
     // -----------------------------------------
 
-    function postUpgrade(uint256 id) public proxied {}
-
-    constructor(uint256 id) {
-        postUpgrade(id); // the proxied modifier from `buidler-deploy` ensure postUpgrade effect can only be used once when the contract is deployed without proxy
-    }
+    constructor() {}
 
     // -----------------------------------------
     // External Functions
     // -----------------------------------------
 
-    function deployCreator(
-        string calldata creatorTitle, 
-        uint256 subscriptionPrice, 
-        uint256 projectDuration) external {
-            
-        console.log(creatorTitle, subscriptionPrice, projectDuration);
-        Creator _creatorContractAddr = new Creator();
-        creatorContracts.push(_creatorContractAddr);
+    function deployCreator(string calldata creatorTitle, int96 subscriptionPrice) external {
+        Creator _creatorContract = new Creator();
+        _creatorContract.init(creatorTitle, subscriptionPrice);
+        creatorContracts.push(_creatorContract);
 
-        emit CreatorDeployed(msg.sender, _creatorContractAddr);
+        emit CreatorDeployed(msg.sender, _creatorContract);
     }
 
     function test() public {}

@@ -4,24 +4,24 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "@ethereum-waffle/chai": "^3.0.2",
-    "@ethersproject/bignumber": "^5.0.5",
-    "@ethersproject/bytes": "^5.0.3",
-    "@ethersproject/solidity": "^5.0.2",
-    "@ethersproject/wallet": "^5.0.2",
+    "@ethereum-waffle/chai": "^3.1.1",
+    "@ethersproject/bignumber": "^5.0.8",
+    "@ethersproject/bytes": "^5.0.5",
+    "@ethersproject/solidity": "^5.0.5",
+    "@ethersproject/wallet": "^5.0.5",
     "@nomiclabs/buidler": "^1.4.6",
-    "@types/chai": "^4.2.11",
+    "@types/chai": "^4.2.13",
     "@types/mocha": "^8.0.2",
-    "@types/node": "^14.10.2",
-    "buidler-deploy": "^0.6.0-beta.26",
+    "@types/node": "^14.11.8",
+    "buidler-deploy": "^0.6.0-beta.29",
     "buidler-ethers-v5": "^0.2.2",
     "chai": "^4.2.0",
     "creaton-common": "../common-lib",
     "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
-    "ethers": "^5.0.8",
+    "ethers": "^5.0.17",
     "mocha": "^8.1.1",
-    "solidity-coverage": "^0.7.10",
+    "solidity-coverage": "^0.7.11",
     "ts-node": "^9.0.0",
     "typescript": "^3.8.3"
   },
@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^3.2.0",
-    "@superfluid-finance/ethereum-contracts": "0.1.0-preview-20200928-fix6",
+    "@superfluid-finance/ethereum-contracts": "^0.1.2-preview-20201014-fix3",
     "@truffle/contract": "^4.2.25"
   }
 }

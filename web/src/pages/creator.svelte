@@ -10,14 +10,72 @@
   let creatorName: string = '';
   let subscriptionPrice: number;
   let projectDuration: number; // 6337 = approx # of blocks per day
+  let files;
+  let data;
+  let counter;
+  let key;
+  let encrypted;
+
+  $: if (files) {
+    let file = files[0];
+    let reader = new FileReader();
+    reader.onload = function(evt) {
+        data = new Uint8Array(evt.target.result);
+    }
+    reader.readAsArrayBuffer(file);
+        const result = hubClient.addFileToBucket("testname", data);
+        }
+  }
 
   async function deployCreator() {
     await flow.execute(async (contracts) => {
-      const receipt = await contracts.CreatonFactory.deployCreator(creatorName, subscriptionPrice, projectDuration);
+      const receipt = await contracts.CreatonFactory.deployCreator(creatorName, subscriptionPrice);
       console.log(receipt);
       return receipt;
     });
   }
+
+  function encrypt(data, key, counter, encrypted){ //TODO: add compression, try to find something more efficient than Base64, like Base85
+    counter = new Uint8Array(16) //TODO: no counter reuse, probably should generate random but works for now
+    window.crypto.subtle.encrypt(
+        {
+            name: "AES-CTR",
+            counter: counter, 
+            length: 128, 
+        },
+        key, 
+        data 
+    ).then(function(encData){
+        encrypted = arrayBufferToBase64(encData);
+        console.log(encrypted);
+    });
+}
+
+function genKey(data){
+    window.crypto.subtle.generateKey(
+        {
+            name: "AES-CTR",
+            length: 256
+        },
+        true,
+        ["encrypt", "decrypt"]
+    ).then(function(keyData){
+        key = keyData;
+        return encrypt(data, key);
+    });
+    
+}
+
+function arrayBufferToBase64(buffer) {
+	var binary = '';
+	var bytes = new Uint8Array( buffer );
+	var len = bytes.byteLength;
+	for (var i = 0; i < len; i++) {
+		binary += String.fromCharCode( bytes[ i ] );
+	}
+	return window.btoa(binary);
+}
+
 </script>
 
 <style>
@@ -69,10 +127,7 @@
         <label>Subscription Price: $</label>
         <Input type="number" placeholder="Cost per month" className="field" bind:value={subscriptionPrice} />
       </div>
-      <div class="field-row">
-        <label>Project length:</label>
-        <Input type="number" placeholder="Enter months" className="field" bind:value={projectDuration} />
-      </div>
+      <div class="field-row"><label>Upload content:</label> <input bind:files type="file" /></div>
       <button class="mt-6" type="button" on:click={deployCreator}>Create!</button>
     </form>
   </section>

@@ -23,6 +23,10 @@ contract Creator is Proxied, ERC1155PresetMinterPauser, Ownable {
     string public creatorTitle;
     int96 public subscriptionPrice;
 
+    string creatorTitle;
+    uint256 subscriptionPrice;
+    uint256 projectDuration;
+
     // -----------------------------------------
     // Constructor
     // -----------------------------------------

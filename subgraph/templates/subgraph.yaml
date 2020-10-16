@@ -15,11 +15,11 @@ dataSources:
       apiVersion: 0.0.3
       language: wasm/assemblyscript
       entities:
-        - CreatorDeployed
+        - Creator
       abis:
         - name: CreatonFactory
           file: ./abis/CreatonFactory.json
       eventHandlers:
-        - event: CreatorDeployed(address, address)
+        - event: CreatorDeployed(address,address)
           handler: handleCreatorDeployed
       file: ./src/mapping.ts

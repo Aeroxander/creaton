@@ -1,4 +1,4 @@
-type CreatorDeployed @entity {
+type Creator @entity {
   id: ID!
   user: Bytes!
   creatorContract: Bytes!

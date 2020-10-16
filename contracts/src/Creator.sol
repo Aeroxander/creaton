@@ -13,6 +13,8 @@ contract Creator is Proxied {
     // Storage
     // -----------------------------------------
 
+    address owner;
+    string avatarURL;
     string creatorTitle;
     uint256 subscriptionPrice;
     uint256 projectDuration;
@@ -22,10 +24,13 @@ contract Creator is Proxied {
     // -----------------------------------------
 
     function init(
-        string memory _creatorTitle,
+        string calldata _avatarURL,
+        string calldata _creatorTitle,
         uint256 _subscriptionPrice,
         uint256 _projectDuration
     ) public {
+        owner = msg.sender;
+        avatarURL = _avatarURL;
         creatorTitle = _creatorTitle;
         subscriptionPrice = _subscriptionPrice;
         projectDuration = _projectDuration;
@@ -34,4 +39,9 @@ contract Creator is Proxied {
     // -----------------------------------------
     // External Functions
     // -----------------------------------------
+
+    function setAvatarURL(string calldata _newURL) external {
+        require(msg.sender == owner);
+        avatarURL = _newURL;
+    }
 }

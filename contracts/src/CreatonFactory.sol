@@ -29,13 +29,18 @@ contract CreatonFactory is Proxied {
     // -----------------------------------------
 
     function deployCreator(
+        string calldata avatarURL,
         string calldata creatorTitle, 
         uint256 subscriptionPrice, 
         uint256 projectDuration) external {
             
         Creator creatorContract = new Creator();
         address creatorContractAddr = address(creatorContract);
-        creatorContract.init(creatorTitle, subscriptionPrice, projectDuration);
+        creatorContract.init(
+            avatarURL,
+            creatorTitle, 
+            subscriptionPrice, 
+            projectDuration);
         creatorContracts[msg.sender] = creatorContractAddr;
 
         emit CreatorDeployed(msg.sender, creatorContractAddr);

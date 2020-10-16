@@ -3,7 +3,7 @@
   "chainId": "1337",
   "contracts": {
     "CreatonFactory_Implementation": {
-      "address": "0x86072CbFF48dA3C1F01824a6761A03F105BCC697",
+      "address": "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab",
       "abi": [
         {
           "inputs": [],
@@ -50,6 +50,11 @@
         },
         {
           "inputs": [
+            {
+              "internalType": "string",
+              "name": "avatarURL",
+              "type": "string"
+            },
             {
               "internalType": "string",
               "name": "creatorTitle",
@@ -227,6 +232,11 @@
           "inputs": [
             {
               "internalType": "string",
+              "name": "avatarURL",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
               "name": "creatorTitle",
               "type": "string"
             },
@@ -249,10 +259,15 @@
       ]
     },
     "Creator_Implementation": {
-      "address": "0x4bf749ec68270027C5910220CEAB30Cc284c7BA2",
+      "address": "0xCfEB869F69431e42cdB54A4F4f105C19C080A601",
       "abi": [
         {
           "inputs": [
+            {
+              "internalType": "string",
+              "name": "_avatarURL",
+              "type": "string"
+            },
             {
               "internalType": "string",
               "name": "_creatorTitle",
@@ -270,6 +285,19 @@
             }
           ],
           "name": "init",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "_newURL",
+              "type": "string"
+            }
+          ],
+          "name": "setAvatarURL",
           "outputs": [],
           "stateMutability": "nonpayable",
           "type": "function"
@@ -387,6 +415,11 @@
           "inputs": [
             {
               "internalType": "string",
+              "name": "_avatarURL",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
               "name": "_creatorTitle",
               "type": "string"
             },
@@ -402,6 +435,19 @@
             }
           ],
           "name": "init",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "_newURL",
+              "type": "string"
+            }
+          ],
+          "name": "setAvatarURL",
           "outputs": [],
           "stateMutability": "nonpayable",
           "type": "function"

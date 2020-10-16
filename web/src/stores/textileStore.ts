@@ -68,6 +68,7 @@ export class TextileStore {
 
   public async setupAPI(): Promise<void> {
     this.api = await Users.withKeyInfo(this.keyInfo);
+    await this.api.getToken(this.identity);
   }
 
   public async setupMailBox(): Promise<void> {

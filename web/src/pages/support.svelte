@@ -32,8 +32,8 @@
 
   //TODO: set right address and get superapp json
   const APP_ADDRESS = '0x4690Fa515cfEC6afb03bC5B80FA0De2BD9e1103b';
-  const MINIMUM_GAME_FLOW_RATE = '3858024691358';
-  const CreatonSuperApp = TruffleContract(require('./CreatonSuperApp.json'));
+  const MINIMUM_FLOW_RATE = '3858024691358'; //TODO
+  const CreatonSuperApp = this.TruffleContract(require('./CreatonSuperApp.json'));
 
   async function approveUSDC() {
     const usdcAddress = await sf.resolver.get('tokens.USDC');

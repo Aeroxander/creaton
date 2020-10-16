@@ -118,13 +118,13 @@ export class TextileStore {
     const rawFile = await this.bucketInfo.bucket.pushPath(
       this.bucketInfo.bucketKey,
       fileLocation,
-      this.arrayBufferToBase64(encMetadata.file)
+      encMetadata.file //base64 not necesarry, only makes it 33% bigger this.arrayBufferToBase64(encMetadata.file)
     );
 
     const rawKey = await this.bucketInfo.bucket.pushPath(
       this.bucketInfo.privBucketKey,
       keyLocation,
-      this.arrayBufferToBase64(encMetadata.key)
+      encMetadata.key //base64 not necesarry this.arrayBufferToBase64(encMetadata.key)
     );
 
     return {

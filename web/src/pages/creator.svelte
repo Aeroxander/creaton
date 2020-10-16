@@ -5,76 +5,63 @@
   import Blockie from '../components/Blockie.svelte';
   import {test} from 'creaton-common';
   import {logs} from 'named-logs';
-  import {wallet, flow, chain} from '../stores/wallet';
+  import {wallet, balance, flow, chain} from '../stores/wallet';
+  import { identity } from 'svelte/internal'; 
+  import { TextileStore } from '../stores/textileStore'
+  import web3 from Web3;
+import { emptyDirSync } from 'fs-extra';
+
+  const web3 = new Web3(wallet.web3Provider);
+
+  const textile: TextileStore = new TextileStore(wallet);
 
   let creatorName: string = '';
   let subscriptionPrice: number;
-  let projectDuration: number; // 6337 = approx # of blocks per day
   let files;
-  let data;
-  let counter;
-  let key;
   let encrypted;
+  var arrayBuffer, uint8Array;
 
   $: if (files) {
     let file = files[0];
     let reader = new FileReader();
-    reader.onload = function(evt) {
-        data = new Uint8Array(evt.target.result);
-    }
+      reader.onload = async function(evt) {
+        arrayBuffer = this.result;
+        uint8Array = new Uint8Array(arrayBuffer);
+      }
     reader.readAsArrayBuffer(file);
-        const result = hubClient.addFileToBucket("testname", data);
-        }
+      encrypted = textile.uploadFile(uint8Array);
+    }
+
+    //TODO: set contract.address
+    const MembershipTier = new web3.eth.Contract(contract.abi, contract.address, {
+      from: web3.eth.accounts[0],
+    });
+
+    //TODO: add error catching/validation
+    let metadata = MembershipTier.methods
+      //built-in mint function in openzeppelin minterpauser preset
+      .mint(membershipAddress, 1, 1, `${contentName},${subscriptionPrice},${result.path.path}`) //mint(to, id, amount, data) might need to iterate ID
+      .encodeABI();
+
+    web3.eth.sendTransaction(
+    {
+      from: web3.eth.accounts[0],
+      to: contract.address,
+      data: metadata,
+    },
+    function (receipt) {
+      console.log(receipt);
+    }
+  );
   }
 
   async function deployCreator() {
     await flow.execute(async (contracts) => {
-      const receipt = await contracts.CreatonFactory.deployCreator(creatorName, subscriptionPrice);
+      const receipt = await contracts.CreatonFactory.deployCreator(this.creatorName, this.subscriptionPrice);
       console.log(receipt);
       return receipt;
     });
   }
-
-  function encrypt(data, key, counter, encrypted){ //TODO: add compression, try to find something more efficient than Base64, like Base85
-    counter = new Uint8Array(16) //TODO: no counter reuse, probably should generate random but works for now
-    window.crypto.subtle.encrypt(
-        {
-            name: "AES-CTR",
-            counter: counter, 
-            length: 128, 
-        },
-        key, 
-        data 
-    ).then(function(encData){
-        encrypted = arrayBufferToBase64(encData);
-        console.log(encrypted);
-    });
-}
-
-function genKey(data){
-    window.crypto.subtle.generateKey(
-        {
-            name: "AES-CTR",
-            length: 256
-        },
-        true,
-        ["encrypt", "decrypt"]
-    ).then(function(keyData){
-        key = keyData;
-        return encrypt(data, key);
-    });
-    
-}
-
-function arrayBufferToBase64(buffer) {
-	var binary = '';
-	var bytes = new Uint8Array( buffer );
-	var len = bytes.byteLength;
-	for (var i = 0; i < len; i++) {
-		binary += String.fromCharCode( bytes[ i ] );
-	}
-	return window.btoa(binary);
-}
 
 </script>
 
@@ -127,7 +114,10 @@ function arrayBufferToBase64(buffer) {
         <label>Subscription Price: $</label>
         <Input type="number" placeholder="Cost per month" className="field" bind:value={subscriptionPrice} />
       </div>
-      <div class="field-row"><label>Upload content:</label> <input bind:files type="file" /></div>
+      <div class="field-row">
+        <label>Upload content:</label>
+        <input accept="image/png, image/jpeg" bind:files type="file" />
+      </div>
       <button class="mt-6" type="button" on:click={deployCreator}>Create!</button>
     </form>
   </section>

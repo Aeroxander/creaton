@@ -6,11 +6,6 @@
     "@curi/interactions": "^2.0.2",
     "@curi/router": "^2.1.1",
     "@curi/svelte": "^2.0.0-beta.6",
-    "@ethersproject/bignumber": "^5.0.5",
-    "@ethersproject/bytes": "^5.0.3",
-    "@ethersproject/contracts": "^5.0.3",
-    "@ethersproject/providers": "^5.0.6",
-    "@ethersproject/solidity": "^5.0.2",
     "@hickory/browser": "^2.1.0",
     "@textile/hub": "^1.1.1",
     "@urql/core": "^1.12.3",
@@ -21,6 +16,7 @@
     "named-logs-console": "0.0.14",
     "smelte": "^1.0.16",
     "svelte": "3.24.1",
+    "svelte-file-dropzone": "0.0.10",
     "svelte-hmr": "0.10.2",
     "svelte-routing": "^1.4.2",
     "web3": "^1.3.0",
@@ -32,6 +28,11 @@
     "wonka": "^4.0.14"
   },
   "devDependencies": {
+    "@ethersproject/bignumber": "^5.0.5",
+    "@ethersproject/bytes": "^5.0.3",
+    "@ethersproject/contracts": "^5.0.3",
+    "@ethersproject/providers": "^5.0.6",
+    "@ethersproject/solidity": "^5.0.2",
     "@tailwindcss/ui": "^0.5.0",
     "@tsconfig/svelte": "^1.0.8",
     "@types/favicons": "^5.5.0",
@@ -51,6 +52,7 @@
     "tslib": "^2.0.0",
     "typescript": "^3.9.7"
   },
+  "browser": "",
   "scripts": {
     "prepare": "npm link ../common-lib && node use_ethers_browser_modules.js && npm run generate",
     "validate": "svelte-check && tsc --noEmit",

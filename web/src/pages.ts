@@ -18,6 +18,11 @@ export default [
     asyncComponent: (): Promise<ComponentModule> => import('./pages/sign-up.svelte'),
   },
   {
+    name: 'Creator Admin',
+    path: 'creator-admin',
+    asyncComponent: (): Promise<ComponentModule> => import('./pages/creator-admin.svelte'),
+  },
+  {
     name: 'Creator',
     path: 'creator/:id',
     asyncComponent: (): Promise<ComponentModule> => import('./pages/creator.svelte'),

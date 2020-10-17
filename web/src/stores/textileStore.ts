@@ -106,6 +106,7 @@ export class TextileStore {
   }
 
 
+
   public async create_thread(): Promise<void> {
     // TODO have to do these once when registering, fetch in subsequent logins
     this.threadID = await this.client.newDB(ThreadID.fromString('creaton'));
@@ -144,7 +145,7 @@ export class TextileStore {
     const keyLocation = `keys/${uploadName}`;
 
     const encMetadata = await this.encryptFile(file);
-    
+
     const rawFile = await this.bucketInfo.bucket.pushPath(
       this.bucketInfo.bucketKey,
       fileLocation,

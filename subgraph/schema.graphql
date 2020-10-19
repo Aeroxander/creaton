@@ -1,0 +1,7 @@
+type Creator @entity {
+  id: ID!
+  user: Bytes!
+  creatorContract: Bytes!
+  title: String!
+  timestamp: BigInt!
+}

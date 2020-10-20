@@ -3,7 +3,7 @@
   import Button from '../components/Button.svelte';
   import Input from '../components/Input.svelte';
   import Blockie from '../components/Blockie.svelte';
-  import {test} from 'creaton-common';
+  //import {test} from 'creaton-common';
   import {logs} from 'named-logs';
   import {wallet, flow, chain} from '../stores/wallet';
   import {Contract} from '@ethersproject/contracts';

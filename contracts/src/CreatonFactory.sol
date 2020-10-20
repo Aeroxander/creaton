@@ -10,39 +10,37 @@ contract CreatonFactory is Proxied {
     // Events
     // -----------------------------------------
 
-    event CreatorDeployed(address indexed user, Creator creatorContract);
+    event CreatorDeployed(address user, address creatorContract, string title);
 
     // -----------------------------------------
     // Storage
     // -----------------------------------------
 
-    Creator[] creatorContracts;
+    mapping(address => address) public creatorContracts;
 
     // -----------------------------------------
     // Constructor
     // -----------------------------------------
 
-    function postUpgrade(uint256 id) public proxied {}
-
-    constructor(uint256 id) {
-        postUpgrade(id); // the proxied modifier from `buidler-deploy` ensure postUpgrade effect can only be used once when the contract is deployed without proxy
-    }
+    constructor() {}
 
     // -----------------------------------------
     // External Functions
     // -----------------------------------------
 
     function deployCreator(
-        string calldata creatorTitle, 
-        uint256 subscriptionPrice, 
-        uint256 projectDuration) external {
+        string calldata avatarURL,
+        string calldata title, 
+        uint256 subscriptionPrice) external {
             
-        console.log(creatorTitle, subscriptionPrice, projectDuration);
-        Creator _creatorContractAddr = new Creator();
-        creatorContracts.push(_creatorContractAddr);
+        Creator creatorContract = new Creator();
+        address creatorContractAddr = address(creatorContract);
+        creatorContract.init(
+            avatarURL,
+            title, 
+            subscriptionPrice);
+        creatorContracts[msg.sender] = creatorContractAddr;
 
-        emit CreatorDeployed(msg.sender, _creatorContractAddr);
+        emit CreatorDeployed(msg.sender, creatorContractAddr, title);
     }
-
-    function test() public {}
 }

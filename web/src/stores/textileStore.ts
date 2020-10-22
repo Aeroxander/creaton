@@ -237,7 +237,6 @@ export class TextileStore {
     var binary = '';
     for await (let value of metadata){
       var len = value.byteLength;
-      console.log(len);
 	    for (var i = 0; i < len; i++) {
 		    binary += String.fromCharCode( value[ i ] );
       }

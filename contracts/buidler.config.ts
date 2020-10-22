@@ -4,6 +4,7 @@ import {usePlugin, BuidlerConfig} from '@nomiclabs/buidler/config';
 usePlugin('buidler-ethers-v5');
 usePlugin('buidler-deploy');
 usePlugin('solidity-coverage');
+usePlugin("@nomiclabs/buidler-web3");
 
 const mnemonic = process.env.MNEMONIC;
 let accounts;

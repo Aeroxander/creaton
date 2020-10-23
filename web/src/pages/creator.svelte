@@ -1,5 +1,6 @@
 <script lang="ts">
   import WalletAccess from '../templates/WalletAccess.svelte';
+  import Button from '../components/Button.svelte';
   import {Contract} from '@ethersproject/contracts';
   import {contracts} from '../contracts.json';
   import {wallet, flow, chain} from '../stores/wallet';
@@ -29,20 +30,24 @@
     afterUpdate(async () => {
       creator = $creators.data.filter(data => data.creatorContract === contractAddress)[0];
     })
+  }
 
+  function handleSubscribe(){
+    console.log('todo: handleSubscribe')
   }
 </script>
 <WalletAccess>
-  <section class="py-8 px-4 text-center max-w-lg mx-auto">
+  <section class="py-8 px-4 text-center max-w-md mx-auto">
     {#if !creator}
       <div>Fetching creator...</div>
     {:else}
       <h3 class="text-4xl leading-normal font-medium text-gray-900 dark:text-gray-500 truncate">{creator.title}</h3>
-      <img class="avatar" src={creator.avatarURL} alt={creator.title}/>
-      <h3 class="text-3xl mt-3 leading-normal font-medium text-gray-900 dark:text-gray-500 truncate">Monthly fee: ${creator.subscriptionPrice}</h3>
-      <p class="mt-2 text-base leading-6 text-gray-500 dark:text-gray-300 truncate mx-10">
-        Owner address: {creator.user}
+      <p class="mb-2 text-base leading-6 text-gray-500 dark:text-gray-300 text-center">
+        {creator.user}
       </p>
+      <img class="avatar" src={creator.avatarURL} alt={creator.title}/>
+          <Button class="mt-3" on:click={handleSubscribe}>
+            Subscribe - ${creator.subscriptionPrice}</Button>
     {/if}
   </section>
 </WalletAccess>

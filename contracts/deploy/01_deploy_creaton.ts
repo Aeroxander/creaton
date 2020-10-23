@@ -5,11 +5,12 @@ import {ethers} from '@nomiclabs/buidler';
 const Transaction = require("ethereumjs-tx").Transaction;
 const ethUtils = require("ethereumjs-util");
 
+const SuperfluidSDK = require("@superfluid-finance/ethereum-contracts");
+
 const func: DeployFunction = async function (bre: BuidlerRuntimeEnvironment) {
   let {deployer} = await bre.getNamedAccounts();
   const {deploy} = bre.deployments;
   const useProxy = !bre.network.live;
-
   console.log('deployer: ', deployer);
 
   // proxy only in non-live network (localhost and buidlerevm) enabling HCR (Hot Contract Replaement)
@@ -23,8 +24,8 @@ const func: DeployFunction = async function (bre: BuidlerRuntimeEnvironment) {
   });
 
 
+
   console.log("Static erc1820 deployment initiated");
-  const targetAddress = "0xa990077c3205cbDf861e17Fa532eeB069cE9fF96";
   const rawTx = {
     nonce: 0,
     gasPrice: 10000,
@@ -36,7 +37,7 @@ const func: DeployFunction = async function (bre: BuidlerRuntimeEnvironment) {
     s: "0x1820182018201820182018201820182018201820182018201820182018201820"
     
 };
-
+console.log('test')
 const tx = new Transaction(rawTx);
 
 const signer = await ethers.getSigners();
@@ -49,19 +50,6 @@ const res = {
       "0x" + ethUtils.generateAddress(tx.getSenderAddress(), ethUtils.toBuffer(0)).toString("hex")
   ),
 };
-console.log('test')
-//assert.equal("0xa990077c3205cbDf861e17Fa532eeB069cE9fF96", res.sender);
-//assert.equal("0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24", res.contractAddr);
-
-//expect(await res.sender.to.equal(
-//  '0xa990077c3205cbDf861e17Fa532eeB069cE9fF96'
-//));
-
-//expect(await res.contractAddr.to.equal(
-//  '0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24'
-//));
-
-  //sendeth
   
   const tx1 = await signer[0].sendTransaction({
     to: res.sender,
@@ -71,9 +59,34 @@ console.log('test')
   console.log("erc1820 target address funded");
   const tx2 = await ethers.provider.sendTransaction(res.rawTx);
   await tx2.wait();
-  //console.log("REACT_APP_ERC1820='" + ERC820_ADDRESS + "'");
-  //await saveContractAddress("erc1820", ERC820_ADDRESS);
   console.log("successful erc1820 deploy!")
+
+
+
+
+
+  const version = process.env.RELEASE_VERSION || "test";
+  console.log("release version:", version);
+
+  const sf = new SuperfluidSDK.Framework({
+      chainId: bre.network.config.chainId,
+      version: version,
+      web3Provider: bre.network.provider
+  });
+  await sf.initialize();
+
+  const usdcAddress = await sf.resolver.get("tokens.fUSDC");
+  const usdc = await sf.contracts.TestToken.at(usdcAddress);
+  const usdcxWrapper = await sf.getERC20Wrapper(usdc);
+  const usdcx = await sf.contracts.ISuperToken.at(usdcxWrapper.wrapperAddress);
+
+  //const app = await web3tx(LotterySuperApp.new, "Deploy LotterySuperApp")(
+   //   sf.host.address,
+  //    sf.agreements.cfa.address,
+  //    daix.address
+  //);
+
+  await deploy('CreatonSuperApp', {from: deployer, proxy: useProxy, args: [sf.host.address, sf.agreements.cfa.address, daix.address], log: true});
   
 
   return !useProxy; // when live network, record the script as executed to prevent rexecution

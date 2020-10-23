@@ -23,7 +23,7 @@
             <div>Loading creators...</div>
           {:else}
             {#each $creators.data as creator, index}
-              <CreatorCard creator={creator}>{creator.user}</CreatorCard>
+              <CreatorCard creator={creator}>{creator.creatorContract}</CreatorCard>
             {/each}
           {/if}
       </div>

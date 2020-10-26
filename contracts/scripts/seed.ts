@@ -1,4 +1,4 @@
-import {getUnnamedAccounts, ethers} from '@nomiclabs/buidler';
+import {getUnnamedAccounts, ethers} from 'hardhat';
 
 const mockCreators = [
   ['https://utulsa.edu/wp-content/uploads/2018/08/generic-avatar.jpg', 'Alice', 8],

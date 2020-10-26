@@ -1,18 +1,24 @@
-import {BuidlerRuntimeEnvironment, DeployFunction} from '@nomiclabs/buidler/types';
-import { utils } from 'ethers';
+import {HardhatRuntimeEnvironment, DeployFunction} from 'hardhat/types';
 
-import {ethers} from '@nomiclabs/buidler';
+import "@nomiclabs/hardhat-ethers";
 const Transaction = require("ethereumjs-tx").Transaction;
 const ethUtils = require("ethereumjs-util");
 
 const SuperfluidSDK = require("@superfluid-finance/ethereum-contracts");
 
-const func: DeployFunction = async function (bre: BuidlerRuntimeEnvironment) {
-  let {deployer} = await bre.getNamedAccounts();
-  const {deploy} = bre.deployments;
-  const useProxy = !bre.network.live;
+//const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+  // code here
+//};
+
+//module.exports = async function ({bre: DeployFunction, getNamedAccounts, deployments, live, getChainId, getUnnamedAccounts, ethers, utils}) {
+  module.exports = async function (hre: HardhatRuntimeEnvironment) {
+  let {deployer} = await hre.getNamedAccounts();
+  const {deploy} = hre.deployments;
+  const useProxy = !hre.network.live;
   console.log('deployer: ', deployer);
 
+  console.log('chainID: ', hre.getChainId());
+  
   // proxy only in non-live network (localhost and buidlerevm) enabling HCR (Hot Contract Replaement)
   // in live network, proxy is disabled and constructor is invoked
   await deploy('CreatonFactory', {from: deployer, proxy: useProxy, args: [], log: true});
@@ -22,8 +28,6 @@ const func: DeployFunction = async function (bre: BuidlerRuntimeEnvironment) {
     args: ['https://utulsa.edu/wp-content/uploads/2018/08/generic-avatar.jpg', 'ETHGlobal', 5],
     log: true,
   });
-
-
 
   console.log("Static erc1820 deployment initiated");
   const rawTx = {
@@ -37,10 +41,11 @@ const func: DeployFunction = async function (bre: BuidlerRuntimeEnvironment) {
     s: "0x1820182018201820182018201820182018201820182018201820182018201820"
     
 };
+
 console.log('test')
 const tx = new Transaction(rawTx);
 
-const signer = await ethers.getSigners();
+const signer = await hre.ethers.getSigners();
 const res = {
   sender: ethUtils.toChecksumAddress(
     "0x" + tx.getSenderAddress().toString("hex")
@@ -53,11 +58,11 @@ const res = {
   
   const tx1 = await signer[0].sendTransaction({
     to: res.sender,
-    value: utils.parseEther("0.08") //ethers.utils.parseEther("0.08"), 
+    value: hre.ethers.utils.parseEther("0.08") //ethers.utils.parseEther("0.08"), 
   });
   await tx1.wait();
   console.log("erc1820 target address funded");
-  const tx2 = await ethers.provider.sendTransaction(res.rawTx);
+  const tx2 = await hre.ethers.provider.sendTransaction(res.rawTx);
   await tx2.wait();
   console.log("successful erc1820 deploy!")
 
@@ -68,6 +73,8 @@ const res = {
   const version = process.env.RELEASE_VERSION || "test";
   console.log("release version:", version);
 
+
+  /*
   const sf = new SuperfluidSDK.Framework({
       chainId: bre.network.config.chainId,
       version: version,
@@ -87,8 +94,7 @@ const res = {
   //);
 
   await deploy('CreatonSuperApp', {from: deployer, proxy: useProxy, args: [sf.host.address, sf.agreements.cfa.address, daix.address], log: true});
-  
+  */
 
   return !useProxy; // when live network, record the script as executed to prevent rexecution
 };
-export default func;

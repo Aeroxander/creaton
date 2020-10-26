@@ -1,44 +1,49 @@
 import 'dotenv';
 import {Wallet} from '@ethersproject/wallet';
-import {usePlugin, BuidlerConfig} from '@nomiclabs/buidler/config';
-usePlugin('buidler-ethers-v5');
-usePlugin('buidler-deploy');
-usePlugin('solidity-coverage');
-usePlugin("@nomiclabs/buidler-web3");
+import 'hardhat/config';
+import 'hardhat-deploy';
+import "hardhat-deploy-ethers"
+import { HardhatConfig } from 'hardhat/types';
+//usePlugin('hardhat-ethers-v5');
+//usePlugin('hardhat-deploy');
+//usePlugin('solidity-coverage');
+//usePlugin("@nomiclabs/hardhat-web3");
 
 const mnemonic = process.env.MNEMONIC;
 let accounts;
-let buidlerEvmAccounts;
+let hardhatEvmAccounts;
 if (mnemonic) {
   accounts = {
     mnemonic,
   };
-  buidlerEvmAccounts = [];
+  hardhatEvmAccounts = [];
   for (let i = 0; i < 10; i++) {
     const wallet = Wallet.fromMnemonic(mnemonic, "m/44'/60'/0'/0/" + i);
-    buidlerEvmAccounts.push({
+    hardhatEvmAccounts.push({
       privateKey: wallet.privateKey,
       balance: '1000000000000000000000',
     });
   }
 } else {
-  buidlerEvmAccounts = [];
+  hardhatEvmAccounts = [];
   for (let i = 0; i < 10; i++) {
     const wallet = Wallet.createRandom();
-    buidlerEvmAccounts.push({
+    hardhatEvmAccounts.push({
       privateKey: wallet.privateKey,
       balance: '1000000000000000000000',
     });
   }
 }
 
-const config: BuidlerConfig = {
-  solc: {
-    version: '0.7.1',
-    optimizer: {
-      enabled: true,
-      runs: 2000,
-    },
+module.exports = { 
+  solidity: {
+    version: "0.7.1",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 2000
+      }
+    }
   },
   namedAccounts: {
     deployer: {
@@ -46,11 +51,11 @@ const config: BuidlerConfig = {
     },
   },
   networks: {
-    coverage: {
-      url: 'http://localhost:5458',
-    },
-    buidlerevm: {
-      accounts: buidlerEvmAccounts,
+    //coverage: {
+    //  url: 'http://localhost:5458',
+    //},
+    hardhat: {
+      accounts: hardhatEvmAccounts,
     },
     localhost: {
       url: 'http://localhost:8545',
@@ -81,5 +86,3 @@ const config: BuidlerConfig = {
     sources: 'src',
   },
 };
-
-export default config;

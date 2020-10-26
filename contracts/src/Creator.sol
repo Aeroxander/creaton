@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.7.1;
 
-import "buidler-deploy/solc_0.7/proxy/Proxied.sol";
+import "hardhat-deploy/solc_0.7/proxy/Proxied.sol";
 import "./utils/SafeMath.sol";
-import "@nomiclabs/buidler/console.sol";
+import "hardhat/console.sol";
 import "./ERC1155/ERC1155MixedFungibleMintable.sol";
 
-//import "openzeppelin-solidity/contracts/presets/ERC1155PresetMinterPauser.sol";
-
-contract Creator is Proxied, ERC1155MixedFungibleMintable {
+contract Creator is Proxied {
     using SafeMath for uint256;
     // -----------------------------------------
     // Events

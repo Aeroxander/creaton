@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.7.1;
 
-import "buidler-deploy/solc_0.7/proxy/Proxied.sol";
+import "hardhat-deploy/solc_0.7/proxy/Proxied.sol";
 import "./utils/SafeMath.sol";
-import "@nomiclabs/buidler/console.sol";
+import "hardhat/console.sol";
 import "./Creator.sol";
 
 contract CreatonFactory is Proxied {
@@ -32,15 +32,12 @@ contract CreatonFactory is Proxied {
 
     function deployCreator(
         string calldata avatarURL,
-        string calldata title, 
-        uint256 subscriptionPrice) external {
-            
+        string calldata title,
+        uint256 subscriptionPrice
+    ) external {
         Creator creatorContract = new Creator();
         address creatorContractAddr = address(creatorContract);
-        creatorContract.init(
-            avatarURL,
-            title, 
-            subscriptionPrice);
+        creatorContract.init(avatarURL, title, subscriptionPrice);
         creatorContracts[msg.sender] = creatorContractAddr;
 
         emit CreatorDeployed(msg.sender, creatorContractAddr, title, subscriptionPrice);

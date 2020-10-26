@@ -21,11 +21,16 @@ contract Creator is Proxied {
     // Storage
     // -----------------------------------------
 
+    struct Balance {
+        uint256 amount;
+        bool isSubscribed;
+    }
     string[] public metadataURL;
     address public creator ;
     string public avatarURL;
     string public creatorTitle;
     uint256 public subscriptionPrice;
+    mapping(address => Balance) public currentBalance;
 
     // -----------------------------------------
     // Constructor
@@ -45,6 +50,12 @@ contract Creator is Proxied {
     // -----------------------------------------
     // External Functions
     // -----------------------------------------
+
+    function subscribe(uint256 _amount) external {
+        require(_amount != 0, "Missing subscription amount");
+        require(currentBalance[msg.sender].isSubscribed == false, "Already subscribed");
+        currentBalance[msg.sender] = Balance(_amount, true);
+    }
 
     function setAvatarURL(string calldata _newURL) external {
         require(msg.sender == creator);

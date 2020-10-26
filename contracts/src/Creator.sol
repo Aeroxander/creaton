@@ -24,6 +24,7 @@ contract Creator is Proxied, ERC1155MixedFungibleMintable {
     string public avatarURL;
     string public creatorTitle;
     uint256 public subscriptionPrice;
+    mapping(address => uint256) public currentCollateral;
 
     // -----------------------------------------
     // Constructor
@@ -43,6 +44,12 @@ contract Creator is Proxied, ERC1155MixedFungibleMintable {
     // -----------------------------------------
     // External Functions
     // -----------------------------------------
+
+    function subscribe(uint256 _amount) external {
+        require(_amount != 0x0, "Missing subscription amount");
+        require(currentCollateral[msg.sender] == 0x0, "Already subscribed");
+        currentCollateral[msg.sender] = _amount;
+    }
 
     function setAvatarURL(string calldata _newURL) external {
         require(msg.sender == owner);

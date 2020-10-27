@@ -2,8 +2,9 @@ import 'dotenv';
 import {Wallet} from '@ethersproject/wallet';
 import 'hardhat/config';
 import 'hardhat-deploy';
-import "hardhat-deploy-ethers"
-import { HardhatConfig } from 'hardhat/types';
+import 'hardhat-deploy-ethers';
+import {HardhatUserConfig} from 'hardhat/types';
+//import {HardhatConfig} from 'hardhat/types';
 //usePlugin('hardhat-ethers-v5');
 //usePlugin('hardhat-deploy');
 //usePlugin('solidity-coverage');
@@ -35,15 +36,15 @@ if (mnemonic) {
   }
 }
 
-module.exports = { 
+const config: HardhatUserConfig = {
   solidity: {
-    version: "0.7.1",
+    version: '0.7.1',
     settings: {
       optimizer: {
         enabled: true,
-        runs: 2000
-      }
-    }
+        runs: 2000,
+      },
+    },
   },
   namedAccounts: {
     deployer: {
@@ -86,3 +87,4 @@ module.exports = {
     sources: 'src',
   },
 };
+export default config;

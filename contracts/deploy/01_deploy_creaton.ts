@@ -12,7 +12,7 @@ const SuperfluidSDK = require('@superfluid-finance/ethereum-contracts');
 
 //module.exports = async function ({bre: DeployFunction, getNamedAccounts, deployments, live, getChainId, getUnnamedAccounts, ethers, utils}) {
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  const {deployments, getNamedAccounts, getChainId, ethers, network} = hre;
+  const {deployments, getNamedAccounts, getChainId, ethers, network, web3} = hre;
   const {deploy} = deployments;
 
   const {deployer} = await getNamedAccounts();
@@ -30,7 +30,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     args: ['https://utulsa.edu/wp-content/uploads/2018/08/generic-avatar.jpg', 'ETHGlobal', 5],
     log: true,
   });
-
+  //Superfluid, work in progress
+  /*
   console.log('Static erc1820 deployment initiated');
   const rawTx = {
     nonce: 0,
@@ -71,7 +72,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const sf = new SuperfluidSDK.Framework({
     chainId: network.config.chainId,
     version: version,
-    web3Provider: network.provider,
+    web3Provider: ethers.providers.Web3Provider,
   });
   await sf.initialize();
 
@@ -80,18 +81,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const usdcxWrapper = await sf.getERC20Wrapper(usdc);
   const usdcx = await sf.contracts.ISuperToken.at(usdcxWrapper.wrapperAddress);
 
-  //const app = await web3tx(LotterySuperApp.new, "Deploy LotterySuperApp")(
-  //   sf.host.address,
-  //    sf.agreements.cfa.address,
-  //    daix.address
-  //);
-
   await deploy('CreatonSuperApp', {
     from: deployer,
     proxy: useProxy,
     args: [sf.host.address, sf.agreements.cfa.address, usdcx.address],
     log: true,
   });
+  */
 
   return !useProxy; // when live network, record the script as executed to prevent rexecution
 };

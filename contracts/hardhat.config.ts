@@ -4,6 +4,7 @@ import 'hardhat/config';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 import {HardhatUserConfig} from 'hardhat/types';
+import '@nomiclabs/hardhat-web3';
 //import {HardhatConfig} from 'hardhat/types';
 //usePlugin('hardhat-ethers-v5');
 //usePlugin('hardhat-deploy');

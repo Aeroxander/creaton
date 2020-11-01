@@ -51,19 +51,24 @@ contract Creator is Proxied {
     // External Functions
     // -----------------------------------------
 
-    function subscribe(uint256 _amount) external {
-        require(_amount != 0, "Missing subscription amount");
-        require(currentBalance[msg.sender].isSubscribed == false, "Already subscribed");
-        currentBalance[msg.sender] = Balance(_amount, true);
+    modifier onlyCreator(){
+        require(msg.sender == creator, 'You are not the creator');
+        _;
     }
 
-    function setAvatarURL(string calldata _newURL) external {
-        require(msg.sender == creator);
+    function subscribe(uint256 _amount) external returns (bool) {
+        require(_amount != 0, "Missing subscription amount");
+        require(msg.sender != creator, "Creators can't subscribe to themselves");
+        require(currentBalance[msg.sender].isSubscribed == false, "Already subscribed");
+        currentBalance[msg.sender] = Balance({amount: _amount, isSubscribed: true});
+        return true;
+    }
+
+    function setAvatarURL(string calldata _newURL) external onlyCreator {
         avatarURL = _newURL;
     }
 
-    function setMetadataURL(string calldata _url) external {
-        require(msg.sender == creator);
+    function setMetadataURL(string calldata _url) external onlyCreator {
         metadataURL.push(_url);
     }
 

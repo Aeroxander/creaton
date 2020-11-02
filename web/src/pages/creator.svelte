@@ -15,6 +15,8 @@
   let currentBalance;
   let isSubscribed;
 
+  let subscriptionStatus;
+
   if (typeof window !== 'undefined') {
     contractAddress = window.location.pathname.split('/')[2];
   }
@@ -37,19 +39,32 @@
         wallet.provider.getSigner()
       )
 
+    creatorContract.on("NewSubscriber", (...response) => {
+      const [address, balance] = response;
+      if(address === wallet.address){
+        subscriptionStatus = 'SUBSCRIBED';
+        currentBalance = balance.toNumber();
+      }
+    });
+
     creator = await creatorContract.creator();
     title = await creatorContract.creatorTitle();
     avatarURL = await creatorContract.avatarURL();
     subscriptionPrice = await creatorContract.subscriptionPrice();
-    console.log(wallet.address);
     [currentBalance, isSubscribed] = await creatorContract.currentBalance(wallet.address);
+    if(isSubscribed){
+      subscriptionStatus = 'SUBSCRIBED';
+    } else {
+      subscriptionStatus = 'UNSUBSCRIBED';
+    }
   }
 
   async function handleSubscribe(){
     if(!subscriptionPrice) return; // todo: show error
       try {
         const receipt = await creatorContract.subscribe(subscriptionPrice);
-        console.log(receipt)
+        subscriptionStatus = 'PENDING';
+        // todo: show loader and watch for event when transaction is mined
       } catch(err){
         console.error(err)
       };
@@ -65,13 +80,17 @@
         {creator}
       </p>
       <img class="w-full" src={avatarURL} alt={title}/>
-      {#if !isSubscribed}
+      {#if subscriptionStatus === 'UNSUBSCRIBED'}
       <Button class="mt-3" on:click={handleSubscribe}>
             Subscribe - ${subscriptionPrice}</Button>
       {:else}
-      <p class="mt-4 text-2xl leading-6 dark:text-gray-300 text-center">
-        Subscription balance: ${currentBalance}
-      </p>
+        <p class="mt-4 text-2xl leading-6 dark:text-gray-300 text-center">
+        {#if subscriptionStatus === 'PENDING'}
+          Subscription pending...
+        {:else}
+          Subscription balance: ${currentBalance}
+        {/if}
+        </p>
       {/if}
     {/if}
   </section>

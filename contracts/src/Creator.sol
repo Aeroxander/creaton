@@ -17,6 +17,10 @@ contract Creator is Proxied {
     // Events
     // -----------------------------------------
 
+    event NewSubscriber(
+        address user, 
+        uint256 amount);
+
     // -----------------------------------------
     // Storage
     // -----------------------------------------
@@ -60,7 +64,8 @@ contract Creator is Proxied {
         require(_amount != 0, "Missing subscription amount");
         require(msg.sender != creator, "Creators can't subscribe to themselves");
         require(currentBalance[msg.sender].isSubscribed == false, "Already subscribed");
-        currentBalance[msg.sender] = Balance({amount: _amount, isSubscribed: true});
+        currentBalance[msg.sender] = Balance({amount: _amount, isSubscribed: true});  
+        emit NewSubscriber(msg.sender, _amount);
         return true;
     }
 

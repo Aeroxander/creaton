@@ -1,5 +1,5 @@
 import {expect} from './chai-setup';
-import {ethers, deployments, getNamedAccounts} from 'hardhat';
+import {ethers, deployments} from 'hardhat';
 
 const mockCreator = ['https://utulsa.edu/wp-content/uploads/2018/08/generic-avatar.jpg', 'ETHGlobal', 5];
 
@@ -70,5 +70,10 @@ describe('Creator', async function () {
     } catch (err) {
       expect(err.code).to.equal('MISSING_ARGUMENT');
     }
+  });
+  it('subscription emits event', async () => {
+    await expect(creatorContract.connect(subscriber).subscribe(5))
+      .to.emit(creatorContract, 'NewSubscriber')
+      .withArgs(subscriber.address, 5);
   });
 });
